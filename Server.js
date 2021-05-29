@@ -89,7 +89,7 @@ socket.on('disconnect',function(){
 
 http.listen(process.env.PORT || 3000, function(){
 
-
+  console.log(`Our app is running on port `+ process.env.PORT);
   console.log(`Our app is running on port `+ process.env.PORT);
 
 });
