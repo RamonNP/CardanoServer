@@ -87,9 +87,10 @@ socket.on('disconnect',function(){
 });//END_IO.ON
 
 
-http.listen(3000, function(){
+http.listen(process.env.PORT || 3000, function(){
 
-console.log('server listen on 3000!');
+  console.log(`Our app is running on port ${ PORT }`);
+  console.log(`Our app is running on port `+ process.env.PORT);
 
 });
 
