@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/RamonNP/CardanoServer/issues"
   },
-  "homepage": "https://github.com/RamonNP/CardanoServer#readme"
+  "homepage": "https://github.com/RamonNP/CardanoServer#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
