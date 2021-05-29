@@ -35,7 +35,7 @@ socket.on("JOIN_ROOM",function(pack){
     name : pack.name,
     id: socket.id
   };
-
+  console.log('Player Conectado!'+pack.name);
  clientLookup[current_player.id] = current_player;
 
  socket.emit("JOIN_SUCCESS",current_player);
