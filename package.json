@@ -12,7 +12,10 @@
   },
   "dependencies": {
     "ejs": "^3.1.5",
-    "express": "^4.15.2"
+    "express": "^4.15.2",
+    "socketio": "^1.0.0",
+    "shortid": "^2.2.16"
+
   },
   "devDependencies": {
     "got": "^11.3.0",
