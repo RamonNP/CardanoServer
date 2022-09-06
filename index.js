@@ -91,7 +91,7 @@ gameSocket = io.on('connection', function(socket){
         pack = {
            "meta":{
             "event":"disconnection",
-            "actorid":+socket.id
+            "actorid":socket.id
             },
             "resource":{
                 "position":{"x":"0","y":"2"}
@@ -99,7 +99,7 @@ gameSocket = io.on('connection', function(socket){
         };
         
         socket.broadcast.emit('USER_DISCONNECTED',pack);
-        console.log('DESCONECTOU ZÈ');
+        console.log(pack);
     });//END_SOCKET.ON
 
 });
