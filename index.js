@@ -1,44 +1,62 @@
-var express = require('express');
+var port = process.env.PORT || 3000,
+    io = require('socket.io')(port),
+    gameSocket = null;
 
-var app = express();
+    var clientLookup = {};
 
-var http = require('http').Server(app);
+    var current_player;
+    console.log(port);
 
-var io = require('socket.io')(http);
- 
-var clientLookup = {};
+gameSocket = io.on('connection', function(socket){
+    console.log('socket connected: ' + socket.id);
 
-var current_player;
-io.on('connect', function (socket) {
     socket.on("JOIN_ROOM", function (pack) {
-        console.log(pack.name);
         current_player = {
             name: pack.name,
             id: socket.id,
-            position:'{"position":{"x":"0","y":"2"}}'
+            position:{
+                "position":{
+                    "x":"0",
+                    "y":"2"
+                }
+            }
         };
-        console.log("player: " + socket.id + " joined room.");
+        //console.log("player: " + socket.id + " joined room.");
 
         clientLookup[current_player.id] = current_player;
         
         pack = {
-            mEvent: '{"meta":{"event":"connection","actorid":"'+socket.id +'"},"resource":'+current_player.position+'}'
+            "meta":{
+                "event":"connection",
+                "actorid":socket.id
+            },
+            "resource":current_player.position
         };
+        console.log("player: " + socket.id + " JOIN_SUCCESS "+JSON.stringify(pack));
         socket.emit("JOIN_SUCCESS",pack);
 
         packSombra = {
-            mEvent: '{"meta":{"event":"movimentation","actorid":"'+socket.id +'"},"resource":'+current_player.position+'}'
-        };
+                "meta":{
+                    "event":"movimentation",
+                    "actorid":socket.id
+                },
+                "resource":current_player.position
 
-        //Envia sombras
+        };
+       //Envia sombras
+       console.log("player: " + socket.id + " JOIN_SUCCESS "+JSON.stringify(packSombra));
         socket.broadcast.emit("JOIN_SUCCESS",packSombra);
         //agora enviar TODOS os jogadores para o jogador atual
         for (client in clientLookup) {
             if (clientLookup[client].id != current_player.id) {
                 pack = {
-                    mEvent: '{"meta":{"event":"movimentation","actorid":"'+clientLookup[client].id+'"},"resource":'+clientLookup[client].position+'}'
+                        "meta":{
+                            "event":"movimentation",
+                            "actorid":clientLookup[client].id
+                        },
+                        "resource":clientLookup[client].position
                 };
-                //socket.emit('SPAWN_PLAYER', clientLookup[client]);
+                console.log("player: " + clientLookup[client].id + " JOIN_SUCCESS "+JSON.stringify(pack));
                 socket.emit("JOIN_SUCCESS",pack);
             } 
         }
@@ -47,23 +65,22 @@ io.on('connect', function (socket) {
     });//END_SOCKET.ON
 
     socket.on("MOVE_AND_ROT", function (pack) {
+        console.log("LOGOOOOOOOOOOOO");
         console.log(pack);
-        lastPlayerPosition = JSON.parse(pack);
-        clientLookup[lastPlayerPosition["meta"]["actorid"]].position = JSON.stringify(lastPlayerPosition["resource"]);
+        console.log("LOGOOOOOOOOOOOO");
+        clientLookup[pack.meta.actorid].position = pack.resource;
+        console.log(" POSICAOOOOO "+JSON.stringify(clientLookup[pack.meta.actorid].position));
 
-        var data = {
-            mEvent:pack
-        };
-        socket.broadcast.emit('UPDATE_POS_ROT', data);
+        console.log("player: " + socket.id + " UPDATE_POS_ROT "+JSON.stringify(pack));
+        socket.broadcast.emit('UPDATE_POS_ROT', pack);
         //socket.emit('UPDATE_POS_ROT', data);
     });//END_SOCKET.ON
 
+
     socket.on('ANIMATION', function (pack) {
         console.log(pack);
-        var data = {
-            mEvent:pack
-        };
-        socket.broadcast.emit('UPDATE_ANIMATOR', data);
+        console.log("player: " + socket.id + " UPDATE_ANIMATOR "+JSON.stringify(pack));
+        socket.broadcast.emit('UPDATE_ANIMATOR', pack);
 
     });//END_SOCKET.ON
 
@@ -72,20 +89,17 @@ io.on('connect', function (socket) {
         delete clientLookup[socket.id];
         
         pack = {
-            mEvent: '{"meta":{"event":"disconnection","actorid":"'+socket.id+'"},"resource":{"position":{"x":"0","y":"2"}}}'
+           "meta":{
+            "event":"disconnection",
+            "actorid":+socket.id
+            },
+            "resource":{
+                "position":{"x":"0","y":"2"}
+            }
         };
         
         socket.broadcast.emit('USER_DISCONNECTED',pack);
         console.log('DESCONECTOU ZÈ');
     });//END_SOCKET.ON
 
-});//END_IO.ON
-
-
-http.listen(3045, function () {
-
-    console.log('server listen on 3045!');
-
 });
-
-console.log("------- server is running -------");
