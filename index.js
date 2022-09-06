@@ -103,3 +103,5 @@ gameSocket = io.on('connection', function(socket){
     });//END_SOCKET.ON
 
 });
+
+console.log("------- server is running -------");
