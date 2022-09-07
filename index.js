@@ -96,7 +96,8 @@ gameSocket = io.on('connection', function(socket){
         };
         
         socket.broadcast.emit('USER_DISCONNECTED',pack);
-        console.log(pack);
+        //console.log(pack);
+        console.log('USER_DISCONNECTED: ' + socket.id);
     });//END_SOCKET.ON
 
 });
