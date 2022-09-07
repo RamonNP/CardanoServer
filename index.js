@@ -32,7 +32,7 @@ gameSocket = io.on('connection', function(socket){
             },
             "resource":current_player.position
         };
-        console.log("player: " + socket.id + " JOIN_SUCCESS "+JSON.stringify(pack));
+        //console.log("player: " + socket.id + " JOIN_SUCCESS "+JSON.stringify(pack));
         socket.emit("JOIN_SUCCESS",pack);
 
         packSombra = {
@@ -44,7 +44,7 @@ gameSocket = io.on('connection', function(socket){
 
         };
        //Envia sombras
-       console.log("player: " + socket.id + " JOIN_SUCCESS "+JSON.stringify(packSombra));
+       //console.log("player: " + socket.id + " JOIN_SUCCESS "+JSON.stringify(packSombra));
         socket.broadcast.emit("JOIN_SUCCESS",packSombra);
         //agora enviar TODOS os jogadores para o jogador atual
         for (client in clientLookup) {
@@ -56,29 +56,26 @@ gameSocket = io.on('connection', function(socket){
                         },
                         "resource":clientLookup[client].position
                 };
-                console.log("player: " + clientLookup[client].id + " JOIN_SUCCESS "+JSON.stringify(pack));
+                //console.log("player: " + clientLookup[client].id + " JOIN_SUCCESS "+JSON.stringify(pack));
                 socket.emit("JOIN_SUCCESS",pack);
             } 
         }
         //enviar play local
-        console.log(pack);
+        //console.log(pack);
     });//END_SOCKET.ON
 
     socket.on("MOVE_AND_ROT", function (pack) {
-        console.log("LOGOOOOOOOOOOOO");
-        console.log(pack);
-        console.log("LOGOOOOOOOOOOOO");
         clientLookup[pack.meta.actorid].position = pack.resource;
-        console.log(" POSICAOOOOO "+JSON.stringify(clientLookup[pack.meta.actorid].position));
+        //console.log(" POSICAOOOOO "+JSON.stringify(clientLookup[pack.meta.actorid].position));
 
-        console.log("player: " + socket.id + " UPDATE_POS_ROT "+JSON.stringify(pack));
+        //console.log("player: " + socket.id + " UPDATE_POS_ROT "+JSON.stringify(pack));
         socket.broadcast.emit('UPDATE_POS_ROT', pack);
         //socket.emit('UPDATE_POS_ROT', data);
     });//END_SOCKET.ON
 
 
     socket.on('ANIMATION', function (pack) {
-        console.log(pack);
+        //console.log(pack);
         console.log("player: " + socket.id + " UPDATE_ANIMATOR "+JSON.stringify(pack));
         socket.broadcast.emit('UPDATE_ANIMATOR', pack);
 
