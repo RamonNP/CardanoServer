@@ -76,7 +76,7 @@ gameSocket = io.on('connection', function(socket){
 
     socket.on('ANIMATION', function (pack) {
         //console.log(pack);
-        console.log("player: " + socket.id + " UPDATE_ANIMATOR "+JSON.stringify(pack));
+        //console.log("player: " + socket.id + " UPDATE_ANIMATOR "+JSON.stringify(pack));
         socket.broadcast.emit('UPDATE_ANIMATOR', pack);
 
     });//END_SOCKET.ON
