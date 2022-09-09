@@ -68,7 +68,7 @@ gameSocket = io.on('connection', function(socket){
         clientLookup[pack.meta.actorid].position = pack.resource;
         //console.log(" POSICAOOOOO "+JSON.stringify(clientLookup[pack.meta.actorid].position));
 
-        console.log("player: " + socket.id + " UPDATE_POS_ROT "+JSON.stringify(pack));
+        //console.log("player: " + socket.id + " UPDATE_POS_ROT "+JSON.stringify(pack));
         socket.broadcast.emit('UPDATE_POS_ROT', pack);
         //socket.emit('UPDATE_POS_ROT', data);
     });//END_SOCKET.ON
